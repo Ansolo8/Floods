@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flood Prediction Map</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>Flood Prediction Map</h1>
+    <div style="width: 100%; height: 600px;">
+        <!-- Render the map HTML here -->
+        {{ map_html | safe }}
+    </div>
+    <div id="elevation-info" style="margin-top: 20px;">
+        <strong>Elevation:</strong> <span id="elevation">Click on the map to get elevation data.</span> meters
+    </div>
+
+    <script>
+        // Function to send latitude and longitude to Flask server to get elevation data
+        function getElevation(lat, lon) {
+            $.ajax({
+                url: '/get_elevation',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ lat: lat, lon: lon }),
+                success: function(response) {
+                    $('#elevation').text(response.elevation + " meters");
+                },
+                error: function() {
+                    $('#elevation').text('Error retrieving elevation data');
+                }
+            });
+        }
+
+        // Add click event listener to the map to retrieve latitude and longitude
+        document.addEventListener('click', function(event) {
+            const target = event.target;
+            if (target.tagName === 'TD' && target.className === 'folium-popup-content') {
+                const latLngText = target.innerText;
+                const coords = latLngText.match(/(-?\d+\.\d+)/g);
+
+                if (coords && coords.length === 2) {
+                    const lat = parseFloat(coords[0]);
+                    const lon = parseFloat(coords[1]);
+
+                    // Call the function to get elevation
+                    getElevation(lat, lon);
+                }
+            }
+        });
+    </script>
+</body>
+</html>

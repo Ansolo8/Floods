@@ -1,0 +1,6 @@
+[
+    {"name": "Person A", "lat": 38.716046, "lon": -9.139858, "status": "elderly"},
+    {"name": "Person B", "lat": 38.726046, "lon": -9.129858, "status": "disabled"},
+    {"name": "Person C", "lat": 38.746046, "lon": -9.149858, "status": "child"},
+    {"name": "Animal A", "lat": 38.80186507588605, "lon": -9.38423078181044, "status": "Manuel JOaquim dos Santos Albertino"}
+]
